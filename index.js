@@ -94,8 +94,8 @@ app.post('/send_data', async (req, res) => {
   }
 });
 
-const PORT=3002;
-app.set("port", process.env.port || 3002)
+const PORT=3010;
+app.set("port", process.env.port || 3010)
 app.listen(app.get("port"), async() => {
   try{     
     console.log(`Iot Data Relayer service running on port ${PORT}`)
