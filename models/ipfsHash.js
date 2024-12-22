@@ -6,6 +6,7 @@ const ipfsDataSchema = new mongoose.Schema({
     spO2:Number,
     bpm:Number,
     timestamp:Number,
+    id:Number,
 });
 
 const IpfsData = mongoose.model("ipfsData", ipfsDataSchema);

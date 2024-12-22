@@ -22,7 +22,24 @@ app.use(
 
 
 
+app.get("/get_data",async(req,res)=>{
+  const { id } = req.query; // Extract `id` from query parameters
 
+  if (!id) {
+    return res.status(400).json({ error: 'ID is required' });
+  }
+
+  try {
+    const data = await IpfsData.find({ id }); // Find all documents with the matching `id`
+    if (data.length === 0) {
+      return res.status(404).json({ error: 'No data found for the provided ID' });
+    }
+    res.status(200).json(data); // Send the matching documents as JSON
+  } catch (error) {
+    console.error('Error fetching data by ID:', error);
+    res.status(500).json({ error: 'Failed to fetch data' });
+  }
+});
 
 app.post('/send_data', async (req, res) => {
   // IPFS API endpoint
@@ -31,6 +48,7 @@ app.post('/send_data', async (req, res) => {
   // JSON data to store
   const data = req.body;
   data["timestamp"] = Date.now();
+  data["id"]=123;
   console.log(data);
 
   try {
@@ -51,7 +69,8 @@ app.post('/send_data', async (req, res) => {
           spO2:data.SpO2,
           temperature:data.temperature,
           hash:response.data.Hash,
-          bpm:data.BPM 
+          bpm:data.BPM,
+          id:data.id
         }); 
 
         const savedData = await ipfsData.save();
